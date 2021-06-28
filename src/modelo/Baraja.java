@@ -66,8 +66,7 @@ public class Baraja {
    
     public void imprimirCartas(){
         for(Carta carta: this.cartas){
-            System.out.println("Valor: "+carta.valor);
-            System.out.println("Tipo: "+carta.tipo);
+            System.out.println("Valor: "+carta.valor+" Tipo: "+carta.tipo);
         }
         System.out.println("");
     }

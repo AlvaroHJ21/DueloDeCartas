@@ -113,8 +113,7 @@ public class Mano {
     public void imprimirCartasD() {
         System.out.println("DUELO");
         for (Carta carta : this.cartasD) {
-            System.out.println("Valor: " + carta.valor);
-            System.out.println("Tipo: " + carta.tipo);
+            System.out.println("Valor: "+carta.valor+" Tipo: "+carta.tipo);
         }
         System.out.println("");
     }
@@ -122,8 +121,7 @@ public class Mano {
     public void imprimirCartasE() {
         System.out.println("ESPECIALES");
         for (Carta carta : this.cartasE) {
-            System.out.println("Valor: " + carta.valor);
-            System.out.println("Tipo: " + carta.tipo);
+            System.out.println("Valor: "+carta.valor+" Tipo: "+carta.tipo);
         }
         System.out.println("");
     }
