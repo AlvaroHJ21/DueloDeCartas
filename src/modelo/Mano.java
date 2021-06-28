@@ -68,10 +68,19 @@ public class Mano {
         return c;
     }
     
+    //METODOS DE PRUEBA
     public Carta getCartaDuelo(){ //OBTIENE LA CARTA DE MÁS ARRIBA DE DUELO
         Carta c = null;
         if(this.cartasD.size()>0){
             c = this.cartasD.remove(this.cartasD.size()-1);
+        }
+        return c;
+    }
+    
+    public Carta getCartaEspecial(){ //OBTIENE LA CARTA DE MÁS ARRIBA DE DUELO
+        Carta c = null;
+        if(this.cartasE.size()>0){
+            c = this.cartasE.remove(this.cartasE.size()-1);
         }
         return c;
     }
@@ -111,19 +120,19 @@ public class Mano {
     }
 
     public void imprimirCartasD() {
-        System.out.println("DUELO");
+        System.out.print("CARTAS DUELO: ");
         for (Carta carta : this.cartasD) {
-            System.out.println("Valor: "+carta.valor+" Tipo: "+carta.tipo);
+            System.out.print(" "+carta.valor);
         }
-        System.out.println("");
+        System.out.println();
     }
     
     public void imprimirCartasE() {
-        System.out.println("ESPECIALES");
+        System.out.print("CARTAS ESPECIALES: ");
         for (Carta carta : this.cartasE) {
-            System.out.println("Valor: "+carta.valor+" Tipo: "+carta.tipo);
+            System.out.print(" "+carta.valor);
         }
-        System.out.println("");
+        System.out.println();
     }
 
 }

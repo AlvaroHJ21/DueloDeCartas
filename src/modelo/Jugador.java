@@ -16,32 +16,15 @@ public class Jugador {
     public Baraja baraja;
     public Mano mano;
     public int vida;
+    public boolean turno;
     
     public Jugador(String nombre){
         this.nombre = nombre;
         this.baraja = new Baraja();
         this.mano = new Mano();
         this.vida = 10;
+        this.turno = true;
     }
-    
-    public void robarCarta(){
-        this.mano.addCarta(this.baraja.extraerCartaArriba());
-    }
-    
-    public void colocarCarta(Carta c, ArrayList<Carta> zona){
-        //EL JUGADOR COLOCA UNA CARTA DE LAS QUE TIENE EN MANO EN SU RESPECTIVA ZONA
-        zona.add(c);
-    }
-    
-    public void atacar(){
-        
-    }
-    
-    public void pasarTurno(){
-        
-    }
-    
-    
     
     public void bajarVida(int descuento){
         this.vida-=descuento;

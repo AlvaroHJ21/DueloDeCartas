@@ -14,44 +14,42 @@ import java.util.ArrayList;
 public class Tablero {
 
     public int nCartas;
-    public ArrayList<Carta> duelo1;
-    public ArrayList<Carta> duelo2;
-    public ArrayList<Carta> especial1;
-    public ArrayList<Carta> especial2;
+    public ArrayList<Carta> zonaDueloJugador;
+    public ArrayList<Carta> zonaDueloOponente;
+    public ArrayList<Carta> zonaEspecialJugador;
+    public ArrayList<Carta> zonaEspecialOponente;
 
     public Tablero() {
-        this.duelo1 = new ArrayList<Carta>();
-        this.duelo2 = new ArrayList<Carta>();
-        this.especial1 = new ArrayList<Carta>();
-        this.especial2 = new ArrayList<Carta>();
+        this.zonaDueloJugador = new ArrayList<Carta>();
+        this.zonaDueloOponente = new ArrayList<Carta>();
+        this.zonaEspecialJugador = new ArrayList<Carta>();
+        this.zonaEspecialOponente = new ArrayList<Carta>();
     }
 
     public void imprimirCartas() {
-        System.out.println("CARTAS UBICADAS EN EL TABLERO");
         System.out.println("-----------ESPECIAL 2-----------");
-        for (Carta carta : this.especial2) {
-            System.out.println("Valor: " + carta.valor + " Tipo: " + carta.tipo);
+        for (Carta carta : this.zonaEspecialOponente) {
+            System.out.print(" " + carta.valor);
         }
         System.out.println("");
 
         System.out.println("-----------DUELO 2-----------");
-        for (Carta carta : this.duelo2) {
-            System.out.println("Valor: " + carta.valor + " Tipo: " + carta.tipo);
+        for (Carta carta : this.zonaDueloOponente) {
+            System.out.print(" " + carta.valor);
         }
         System.out.println("");
 
         System.out.println("-----------DUELO 1-----------");
-        for (Carta carta : this.duelo1) {
-            System.out.println("Valor: " + carta.valor + " Tipo: " + carta.tipo);
+        for (Carta carta : this.zonaDueloJugador) {
+            System.out.print(" " + carta.valor);
         }
         System.out.println("");
 
         System.out.println("-----------ESPECIAL 1-----------");
-        for (Carta carta : this.especial1) {
-            System.out.println("Valor: " + carta.valor + " Tipo: " + carta.tipo);
+        for (Carta carta : this.zonaEspecialJugador) {
+            System.out.print(" " + carta.valor);
         }
         System.out.println("");
-
     }
 
     public void quitarCartaDeZona(int valor, ArrayList<Carta> zona) {
