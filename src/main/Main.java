@@ -14,7 +14,7 @@ import modelo.*;
 public class Main {
     public static void main(String[] args) {
         Jugador jugador1 = new Jugador("Alvaro");
-        Tablero tablero;
+        Tablero tablero = new Tablero();
         
         //GENERAMOS LAS CARTAS EN LA BARAJA DEL JUGADOR
         jugador1.baraja.generarCartas();
@@ -24,9 +24,7 @@ public class Main {
         //REPARTIMOS LAS CARTAS INICIALES DEL JUGADOR (4 DE DUELO Y 1 ESPECIAL)
         System.out.println("CARTAS DE DUELO EN MANO");
         jugador1.mano.generarCartasIniciales(jugador1.baraja);
-        System.out.println("DUELO");
         jugador1.mano.imprimirCartasD();
-        System.out.println("ESPECIALES");
         jugador1.mano.imprimirCartasE();
         
         System.out.println("CARTAS QUE QUEDAN EN LA BARAJA");
@@ -40,14 +38,19 @@ public class Main {
         //JUGADOR ROBA UNA CARTA DE LA BARAJA
         jugador1.robarCarta();
         System.out.println("JUGADOR ROBA UN CARTA");
-        System.out.println("DUELO");
         jugador1.mano.imprimirCartasD();
-        System.out.println("ESPECIALES");
         jugador1.mano.imprimirCartasE();
         
         System.out.println("CARTAS QUE QUEDAN EN LA BARAJA");
         jugador1.baraja.imprimirCartas();
         
+        //JUGADOR PONE UNA CARTA EN ZONA DE DUELO
+        Carta c = jugador1.mano.getCartaDuelo(); //extrae la ultima carta de duelo (solo para probar)
+        jugador1.colocarCarta(c, tablero.duelo1);
+        
+        tablero.imprimirCartas();
+        jugador1.mano.imprimirCartasD();
+        jugador1.mano.imprimirCartasE();
         
     }
     

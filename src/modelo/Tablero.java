@@ -25,7 +25,8 @@ public class Tablero {
         this.especial2 = new ArrayList<Carta>();
     }
     
-    public void imprimirCartasDuelo1(){
+    public void imprimirCartas(){
+        System.out.println("CARTAS UBICADAS EN EL TABLERO");
         System.out.println("DUELO 1");
         for(Carta carta: this.duelo1){
             System.out.println("Valor: "+carta.valor);

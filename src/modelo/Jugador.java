@@ -28,10 +28,8 @@ public class Jugador {
         this.mano.addCarta(this.baraja.extraerCartaArriba());
     }
     
-    public void colocarCarta(int valor, ArrayList<Carta> zona){
+    public void colocarCarta(Carta c, ArrayList<Carta> zona){
         //EL JUGADOR COLOCA UNA CARTA DE LAS QUE TIENE EN MANO EN SU RESPECTIVA ZONA
-        Carta c;
-        c = this.mano.getCarta(valor);
         zona.add(c);
     }
     

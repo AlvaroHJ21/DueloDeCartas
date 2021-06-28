@@ -67,6 +67,14 @@ public class Mano {
         
         return c;
     }
+    
+    public Carta getCartaDuelo(){ //OBTIENE LA CARTA DE MÁS ARRIBA DE DUELO
+        Carta c = null;
+        if(this.cartasD.size()>0){
+            c = this.cartasD.remove(this.cartasD.size()-1);
+        }
+        return c;
+    }
 
     public void generarCartasIniciales(Baraja baraja) {
         //escogiendo las cartas de duelo
@@ -103,6 +111,7 @@ public class Mano {
     }
 
     public void imprimirCartasD() {
+        System.out.println("DUELO");
         for (Carta carta : this.cartasD) {
             System.out.println("Valor: " + carta.valor);
             System.out.println("Tipo: " + carta.tipo);
@@ -111,6 +120,7 @@ public class Mano {
     }
     
     public void imprimirCartasE() {
+        System.out.println("ESPECIALES");
         for (Carta carta : this.cartasE) {
             System.out.println("Valor: " + carta.valor);
             System.out.println("Tipo: " + carta.tipo);
