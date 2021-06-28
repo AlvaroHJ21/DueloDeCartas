@@ -6,91 +6,126 @@
 package modelo;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Alvaro
  */
 public class Juego {
+
     public Tablero tablero;
     public Jugador jugador;
     public Jugador oponente;
-    
-    public Juego(){
+
+    public Juego() {
         tablero = new Tablero();
         jugador = new Jugador("Jugador 1");
         oponente = new Jugador("Jugador 2");
     }
-    
-    public void inicializar(){
+
+    public void inicializar() {
         jugador.baraja.generarCartas();
         jugador.mano.generarCartasIniciales(jugador.baraja);
         jugador.baraja.barajearCartas();
-        
+        jugador.zonaD = tablero.zonaDueloJugador;
+        jugador.zonaE = tablero.zonaEspecialJugador;
+
         oponente.baraja.generarCartas();
         oponente.mano.generarCartasIniciales(oponente.baraja);
         oponente.baraja.barajearCartas();
-        
+        oponente.zonaD = tablero.zonaDueloOponente;
+        oponente.zonaE = tablero.zonaEspecialOponente;
+
         //DECIDIR QUIEN EMPIEZA
         //supongamos que empiezas tú
         jugador.turno = true;
         oponente.turno = false;
     }
-    
-    public void atacarCarta(Jugador atacante, ArrayList<Carta> zonaAtacante, int i, Jugador atacado, ArrayList<Carta> zonaAtacado, int j){
+
+    public void atacarCarta(Jugador atacante, int i, Jugador atacado, int j) {
         //PARA PODER ATACER SE NECESITAN TENER CARTAS EN LA ZONA DE DUELO 1
-        if(tablero.zonaDueloJugador.size()>0 && tablero.zonaDueloOponente.size()>0){
-                        
+        if (tablero.zonaDueloJugador.size() > 0 && tablero.zonaDueloOponente.size() > 0) {
+            //AVISAR AL JUGADOR QUE SERÁ ATACADO
+            if (atacado.zonaE.size() > 0) {
+                String opcion = JOptionPane.showInputDialog("El otro jugador quiere atacarte deseas activar una carta?");
+                if (opcion.equals("si")) {
+                    int v = Integer.parseInt(JOptionPane.showInputDialog("QUE CARTA QUIERES ACTIVAR"));
+                    int a = Integer.parseInt(JOptionPane.showInputDialog("A QUE CARTA QUIERES POTENCIAR"));
+                    activarCarta(atacado, v, a);
+                }else{
+                    System.out.println("Ok");
+                }
+            }
+
             //SELECCIONANDO CARTA DEL JUGADOR
-            Carta cAtacante = zonaAtacante.get(getIndexCartaPorValor(i, zonaAtacante)); 
-            
+            Carta cAtacante = atacante.zonaD.get(getIndexCartaPorValor(i, atacante.zonaD));
             //SELECCIONANDO CARTA DEL OPONENTE
-            Carta cAtacado = zonaAtacado.get(getIndexCartaPorValor(j, zonaAtacado)); 
-            
-            if(cAtacante.valor > cAtacado.valor){ //LA CARTA DEL ATACANTE ES MAYOR
-                atacado.bajarVida(cAtacante.valor-cAtacado.valor);
-                quitarCartaDeZona(cAtacado.valor, zonaAtacado);// 
-                
-            }else if(cAtacado.valor > cAtacante.valor){ //LA CARTA DEL ATACANTE ES MENOR
-                atacante.bajarVida(cAtacado.valor-cAtacante.valor);
-                quitarCartaDeZona(cAtacante.valor, zonaAtacante); // 
-                
-            }else{
+            Carta cAtacado = atacado.zonaD.get(getIndexCartaPorValor(j, atacado.zonaD));
+
+            if (cAtacante.getValorAbsoluto() > cAtacado.getValorAbsoluto()) { //LA CARTA DEL ATACANTE ES MAYOR
+                atacado.bajarVida(cAtacante.getValorAbsoluto() - cAtacado.getValorAbsoluto());
+                quitarCartaDeZona(cAtacado.valor, atacado.zonaD);// 
+
+            } else if (cAtacado.getValorAbsoluto() > cAtacante.getValorAbsoluto()) { //LA CARTA DEL ATACANTE ES MENOR
+                atacante.bajarVida(cAtacado.getValorAbsoluto() - cAtacante.getValorAbsoluto());
+                quitarCartaDeZona(cAtacante.valor, atacante.zonaD); // 
+
+            } else {
                 System.out.println("EMPATE"); //AMBAS CARTAS C DESTRUYEN
             }
-        }else{
+        } else {
             System.out.println("NO HAY CARTAS EN LAS ZONAS DE DUELO");
         }
     }
-    
-    public void robarCarta(Jugador j){
+
+    public void robarCarta(Jugador j) {
         j.mano.addCarta(j.baraja.extraerCartaArriba());
     }
-    
-    public void colocarCartaDuelo(Jugador j, int seleccion, ArrayList<Carta> zona){
+
+    public void colocarCartaEnZona(Jugador j, int seleccion, ArrayList<Carta> zona) {
         //EL JUGADOR COLOCA UNA CARTA DE LAS QUE TIENE EN MANO EN ZONA DE DUELO
         Carta c = j.mano.getCarta(seleccion); // esto si supieramos qué carta elejir
         zona.add(c);
     }
-    
+
     public void quitarCartaDeZona(int valor, ArrayList<Carta> zona) {
         zona.remove(getIndexCartaPorValor(valor, zona));
     }
-    
-    public void mostrarEstado(){
+
+    public void activarCarta(Jugador jugador, int vCartaActiva, int vCartaPotenciada) {
+        int index1 = getIndexCartaPorValor(vCartaActiva, jugador.zonaE);
+        int index2 = getIndexCartaPorValor(vCartaPotenciada, jugador.zonaD);
+        if (index1 != -1 && index2 != -1) {
+            Carta c1 = jugador.zonaE.get(index1);
+            Carta c2 = jugador.zonaD.get(index2);
+            c2.cartaPotenciadora = c1;
+            c2.potenciar();
+            quitarCartaDeZona(vCartaActiva, jugador.zonaE);
+        } else {
+            System.out.println("Error no cuenta con cartas para realizar esa acción");
+        }
+    }
+
+    public void pasarTurno(Jugador A, Jugador B) {
+        A.turno = false;
+        B.turno = true;
+    }
+
+    public void mostrarEstado() {
         System.out.println("***************************************************");
         oponente.mano.imprimirCartasE();
         oponente.mano.imprimirCartasD();
-        System.out.println("VIDA OPONENTE: "+oponente.vida);
+        System.out.println("VIDA OPONENTE: " + oponente.vida);
         this.tablero.imprimirCartas();
-        System.out.println("VIDA JUGADOR: "+jugador.vida);
+        System.out.println("VIDA JUGADOR: " + jugador.vida);
         jugador.mano.imprimirCartasD();
         jugador.mano.imprimirCartasE();
         System.out.println("***************************************************");
         System.out.println("");
     }
-    
-    public int getIndexCartaPorValor(int valor, ArrayList<Carta> zona){
+
+    public int getIndexCartaPorValor(int valor, ArrayList<Carta> zona) {
         boolean esta = false;
         int i = 0;
         for (Carta c : zona) {

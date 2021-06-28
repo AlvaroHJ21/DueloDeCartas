@@ -35,13 +35,13 @@ public class Tablero {
 
         System.out.println("-----------DUELO 2-----------");
         for (Carta carta : this.zonaDueloOponente) {
-            System.out.print(" " + carta.valor);
+            System.out.print(" " + carta.valor+"("+carta.valorExtra+")");
         }
         System.out.println("");
 
         System.out.println("-----------DUELO 1-----------");
         for (Carta carta : this.zonaDueloJugador) {
-            System.out.print(" " + carta.valor);
+            System.out.print(" " + carta.valor+"("+carta.valorExtra+")");
         }
         System.out.println("");
 

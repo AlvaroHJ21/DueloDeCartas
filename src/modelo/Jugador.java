@@ -18,6 +18,9 @@ public class Jugador {
     public int vida;
     public boolean turno;
     
+    public ArrayList<Carta> zonaD;
+    public ArrayList<Carta> zonaE;
+    
     public Jugador(String nombre){
         this.nombre = nombre;
         this.baraja = new Baraja();

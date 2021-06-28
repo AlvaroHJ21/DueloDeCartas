@@ -26,7 +26,7 @@ public class Main {
         
         //JUGADOR UNO COLOCA UNA CARTA DE DUELO
         i = Integer.parseInt(JOptionPane.showInputDialog("JUGADOR: valor de la carta de duelo que desea colocar"));
-        juego.colocarCartaDuelo(juego.jugador, i, juego.tablero.zonaDueloJugador);
+        juego.colocarCartaEnZona(juego.jugador, i, juego.tablero.zonaDueloJugador);
         juego.mostrarEstado();
         
         //JUGADOR OPONENTE ROBA UNA CARTA
@@ -35,16 +35,41 @@ public class Main {
         
         //JUGADOR OPONENTE COLOCA UNA CARTA DE DUELO
         i = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta de duelo que desea colocar"));
-        juego.colocarCartaDuelo(juego.oponente, i, juego.tablero.zonaDueloOponente);
+        juego.colocarCartaEnZona(juego.oponente, i, juego.tablero.zonaDueloOponente);
         juego.mostrarEstado();
         
         //JUGADOR OPONENTE SELECIONA SU CARTA Y LA CARTA DEL JUGADOR Y PRESIONA ATACAR
         i = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta con la que va atacar"));
         j = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta que va ser atacada"));
-        juego.atacarCarta(juego.oponente, juego.tablero.zonaDueloOponente, i, juego.jugador, juego.tablero.zonaDueloJugador, j);
-        
-        //ESTADO FINAL
+        juego.atacarCarta(juego.oponente, i, juego.jugador, j);
         juego.mostrarEstado();
+        
+        //JUGADOR UNO ROBA UNA CARTA Y COLOCA UNA CARTA DE DUELO Y UNA ESPECIAL
+        juego.robarCarta(juego.jugador);
+        juego.mostrarEstado();
+        i = Integer.parseInt(JOptionPane.showInputDialog("JUGADOR: valor de la carta de duelo que desea colocar"));
+        juego.colocarCartaEnZona(juego.jugador, i, juego.tablero.zonaDueloJugador);
+        juego.mostrarEstado();
+        i = Integer.parseInt(JOptionPane.showInputDialog("JUGADOR: valor de la carta especial que desea colocar"));
+        juego.colocarCartaEnZona(juego.jugador, i, juego.tablero.zonaEspecialJugador);
+        juego.mostrarEstado();
+        
+        //JUGADOR UNO PASA EL TURNO AL JUGADOR OPONENTE
+        
+        //JUGADOR OPONENTE ROBA UNA CARTA DE DUELO Y QUIERE ATACAR AL JUGADOR
+        juego.robarCarta(juego.oponente);
+        juego.mostrarEstado();
+        i = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta de duelo que desea colocar"));
+        juego.colocarCartaEnZona(juego.oponente, i, juego.tablero.zonaDueloOponente);
+        juego.mostrarEstado();
+        
+        i = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta con la que va atacar"));
+        j = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta que va ser atacada"));
+        
+        juego.atacarCarta(juego.oponente, i, juego.jugador, j);
+        
+        juego.mostrarEstado();
+        
         
     }
 }
