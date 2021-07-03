@@ -20,6 +20,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import modelo.BtnCarta;
 import modelo.Jugador;
 
@@ -56,6 +57,8 @@ public class JFInicio extends javax.swing.JFrame {
         this.btnCartasTableroDuelo2 = new ArrayList<BtnCarta>();
         this.btnCartasTableroEspecial1 = new ArrayList<BtnCarta>();
         this.btnCartasTableroEspecial2 = new ArrayList<BtnCarta>();
+        
+        
     }
 
     private void actualizarJuego() {
@@ -381,6 +384,16 @@ public class JFInicio extends javax.swing.JFrame {
         gBtnTableroDuelo2 = new javax.swing.ButtonGroup();
         gBtnTableroEspecial1 = new javax.swing.ButtonGroup();
         gBtnTableroEspecial2 = new javax.swing.ButtonGroup();
+        scroll = new javax.swing.JScrollPane();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        panelManoDuelo1 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        panelManoEspecial2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        panelManoEspecial1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        panelManoDuelo2 = new javax.swing.JPanel();
         panelTablero = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
@@ -394,17 +407,21 @@ public class JFInicio extends javax.swing.JFrame {
         btnActivar = new javax.swing.JButton();
         panelTablero2 = new javax.swing.JPanel();
         panelTablero1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        panelManoDuelo2 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        panelManoEspecial1 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        panelManoEspecial2 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        panelManoDuelo1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(500, 600));
+
+        panelManoDuelo1.setLayout(null);
+        jScrollPane4.setViewportView(panelManoDuelo1);
+
+        panelManoEspecial2.setLayout(null);
+        jScrollPane3.setViewportView(panelManoEspecial2);
+
+        panelManoEspecial1.setLayout(null);
+        jScrollPane2.setViewportView(panelManoEspecial1);
+
+        panelManoDuelo2.setLayout(null);
+        jScrollPane1.setViewportView(panelManoDuelo2);
 
         panelTablero.setLayout(null);
         panelTablero.add(jSeparator1);
@@ -503,46 +520,51 @@ public class JFInicio extends javax.swing.JFrame {
         panelTablero.add(panelTablero1);
         panelTablero1.setBounds(0, 220, 330, 140);
 
-        panelManoDuelo2.setLayout(null);
-        jScrollPane1.setViewportView(panelManoDuelo2);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(panelTablero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1)
+                        .addComponent(jScrollPane3)
+                        .addComponent(jScrollPane4))
+                    .addContainerGap()))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 830, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(panelTablero, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
+        );
 
-        panelManoEspecial1.setLayout(null);
-        jScrollPane2.setViewportView(panelManoEspecial1);
-
-        panelManoEspecial2.setLayout(null);
-        jScrollPane3.setViewportView(panelManoEspecial2);
-
-        panelManoDuelo1.setLayout(null);
-        jScrollPane4.setViewportView(panelManoDuelo1);
+        scroll.setViewportView(jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelTablero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane3)
-                    .addComponent(jScrollPane4))
-                .addContainerGap())
+            .addComponent(scroll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(panelTablero, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(scroll, javax.swing.GroupLayout.DEFAULT_SIZE, 830, Short.MAX_VALUE)
         );
 
         pack();
@@ -630,6 +652,7 @@ public class JFInicio extends javax.swing.JFrame {
     private javax.swing.ButtonGroup gBtnTableroDuelo2;
     private javax.swing.ButtonGroup gBtnTableroEspecial1;
     private javax.swing.ButtonGroup gBtnTableroEspecial2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -643,6 +666,7 @@ public class JFInicio extends javax.swing.JFrame {
     private javax.swing.JPanel panelTablero;
     private javax.swing.JPanel panelTablero1;
     private javax.swing.JPanel panelTablero2;
+    private javax.swing.JScrollPane scroll;
     private javax.swing.JLabel txtVidaJugador1;
     private javax.swing.JLabel txtVidaJugador2;
     // End of variables declaration//GEN-END:variables
