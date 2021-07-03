@@ -29,7 +29,7 @@ public class Carta {
         } else {
             this.tipo = "trampa";
         }
-        valorExtra = 0;
+        this.valorExtra = 0;
     }
 
     public void potenciar() {
@@ -63,4 +63,15 @@ public class Carta {
     public int getValorAbsoluto(){
         return this.valor+this.valorExtra;
     }
+
+    @Override
+    public String toString() {
+        if(this.valorExtra==0){
+            return ""+this.valor;
+        }else{
+            return ""+this.valor+"("+this.valorExtra+")";
+        }
+    }
+    
+    
 }

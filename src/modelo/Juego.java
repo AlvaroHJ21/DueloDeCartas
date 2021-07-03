@@ -6,6 +6,7 @@
 package modelo;
 
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,6 +18,7 @@ public class Juego {
     public Tablero tablero;
     public Jugador jugador;
     public Jugador oponente;
+    public int turno = 0; //1: jugador 2: oponente
 
     public Juego() {
         tablero = new Tablero();
@@ -39,8 +41,15 @@ public class Juego {
 
         //DECIDIR QUIEN EMPIEZA
         //supongamos que empiezas tú
-        jugador.turno = true;
-        oponente.turno = false;
+        turno = new Random().nextInt(2) + 1;
+        if (turno == 1) {
+            jugador.turno = true;
+            oponente.turno = false;
+        } else {
+            jugador.turno = false;
+            oponente.turno = true;
+        }
+
     }
 
     public void atacarCarta(Jugador atacante, int i, Jugador atacado, int j) {
@@ -53,7 +62,7 @@ public class Juego {
                     int v = Integer.parseInt(JOptionPane.showInputDialog("QUE CARTA QUIERES ACTIVAR"));
                     int a = Integer.parseInt(JOptionPane.showInputDialog("A QUE CARTA QUIERES POTENCIAR"));
                     activarCarta(atacado, v, a);
-                }else{
+                } else {
                     System.out.println("Ok");
                 }
             }
@@ -73,6 +82,8 @@ public class Juego {
 
             } else {
                 System.out.println("EMPATE"); //AMBAS CARTAS C DESTRUYEN
+                quitarCartaDeZona(cAtacado.valor, atacado.zonaD);
+                quitarCartaDeZona(cAtacante.valor, atacante.zonaD);
             }
         } else {
             System.out.println("NO HAY CARTAS EN LAS ZONAS DE DUELO");
@@ -80,13 +91,22 @@ public class Juego {
     }
 
     public void robarCarta(Jugador j) {
-        j.mano.addCarta(j.baraja.extraerCartaArriba());
+        Carta c = j.baraja.extraerCartaArriba();
+        if (c != null) {
+            j.mano.addCarta(c);
+        } else {
+            System.out.println("NO HAY MAS CARTAS");
+        }
     }
 
-    public void colocarCartaEnZona(Jugador j, int seleccion, ArrayList<Carta> zona) {
+    public boolean colocarCartaEnZona(Jugador j, int seleccion, ArrayList<Carta> zona) {
         //EL JUGADOR COLOCA UNA CARTA DE LAS QUE TIENE EN MANO EN ZONA DE DUELO
-        Carta c = j.mano.getCarta(seleccion); // esto si supieramos qué carta elejir
+        if (zona.size() >= 3) {
+            return false;
+        }
+        Carta c = j.mano.getCarta(seleccion);
         zona.add(c);
+        return true;
     }
 
     public void quitarCartaDeZona(int valor, ArrayList<Carta> zona) {
@@ -107,9 +127,16 @@ public class Juego {
         }
     }
 
-    public void pasarTurno(Jugador A, Jugador B) {
-        A.turno = false;
-        B.turno = true;
+    public void pasarTurno() {
+        if (turno == 1) {
+            turno = 2;
+            jugador.turno = false;
+            oponente.turno = true;
+        } else {
+            turno = 1;
+            jugador.turno = true;
+            oponente.turno = false;
+        }
     }
 
     public void mostrarEstado() {
@@ -122,7 +149,7 @@ public class Juego {
         jugador.mano.imprimirCartasD();
         jugador.mano.imprimirCartasE();
         System.out.println("***************************************************");
-        System.out.println("");
+        System.out.println("Turno del jugador " + turno);
     }
 
     public int getIndexCartaPorValor(int valor, ArrayList<Carta> zona) {

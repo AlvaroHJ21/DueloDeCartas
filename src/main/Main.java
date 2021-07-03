@@ -5,6 +5,7 @@
  */
 package main;
 
+import java.util.Random;
 import javax.swing.JOptionPane;
 import modelo.*;
 
@@ -14,6 +15,17 @@ import modelo.*;
  */
 public class Main {
     public static void main(String[] args) {
+        
+        int i = new Random().nextInt(2);
+        for (int j = 0; j < 10; j++) {
+            i = new Random().nextInt(2)+1;
+            System.out.println(i);
+        }
+        
+        
+    }
+    
+    public static void pruebaEstatica(){
         int i, j;
         //INICIA EL JUEGO
         Juego juego = new Juego();
@@ -69,7 +81,5 @@ public class Main {
         juego.atacarCarta(juego.oponente, i, juego.jugador, j);
         
         juego.mostrarEstado();
-        
-        
     }
 }
