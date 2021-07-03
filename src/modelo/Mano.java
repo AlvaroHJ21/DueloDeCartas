@@ -32,55 +32,55 @@ public class Mano {
             this.cartasE.add(c);
         }
     }
-    
-    public int getIndexCarta(int valor, ArrayList<Carta> cartas){
+
+    public int getIndexCarta(int valor, ArrayList<Carta> cartas) {
         boolean esta = false;
         int i = 0;
-        for(Carta c: cartas){
-            if(c.valor==valor){
+        for (Carta c : cartas) {
+            if (c.valor == valor) {
                 esta = true;
                 break;
             }
             i++;
         }
-        if(!esta){
-            System.out.println("La carta con el valor "+valor+" no existe en la baraja");
+        if (!esta) {
+            System.out.println("La carta con el valor " + valor + " no existe en la baraja");
             i = -1;
         }
         return i;
     }
-    
-    public Carta getCarta(int valor){
+
+    public Carta getCarta(int valor) {
         Carta c = null;
-        
-        if(4<=valor&&valor<=10){
+
+        if (4 <= valor && valor <= 10) {
             int index = getIndexCarta(valor, this.cartasD);
-            if(index!=-1){
+            if (index != -1) {
                 c = this.cartasD.remove(index);
             }
-        }else{
+        } else {
             int index = getIndexCarta(valor, this.cartasE);
-            if(index!=-1){
+            if (index != -1) {
                 c = this.cartasE.remove(index);
             }
         }
-        
+
         return c;
     }
-    
+
     //METODOS DE PRUEBA
-    public Carta getCartaDuelo(){ //OBTIENE LA CARTA DE MÁS ARRIBA DE DUELO
+    public Carta getCartaDuelo() { //OBTIENE LA CARTA DE MÁS ARRIBA DE DUELO
         Carta c = null;
-        if(this.cartasD.size()>0){
-            c = this.cartasD.remove(this.cartasD.size()-1);
+        if (this.cartasD.size() > 0) {
+            c = this.cartasD.remove(this.cartasD.size() - 1);
         }
         return c;
     }
-    
-    public Carta getCartaEspecial(){ //OBTIENE LA CARTA DE MÁS ARRIBA DE DUELO
+
+    public Carta getCartaEspecial() { //OBTIENE LA CARTA DE MÁS ARRIBA DE DUELO
         Carta c = null;
-        if(this.cartasE.size()>0){
-            c = this.cartasE.remove(this.cartasE.size()-1);
+        if (this.cartasE.size() > 0) {
+            c = this.cartasE.remove(this.cartasE.size() - 1);
         }
         return c;
     }
@@ -122,17 +122,16 @@ public class Mano {
     public void imprimirCartasD() {
         System.out.print("CARTAS DUELO: ");
         for (Carta carta : this.cartasD) {
-            System.out.print(" "+carta.valor);
-        }
-        System.out.println();
-    }
-    
-    public void imprimirCartasE() {
-        System.out.print("CARTAS ESPECIALES: ");
-        for (Carta carta : this.cartasE) {
-            System.out.print(" "+carta.valor);
+            System.out.print(" " + carta.valor);
         }
         System.out.println();
     }
 
+    public void imprimirCartasE() {
+        System.out.print("CARTAS ESPECIALES: ");
+        for (Carta carta : this.cartasE) {
+            System.out.print(" " + carta.valor);
+        }
+        System.out.println();
+    }
 }

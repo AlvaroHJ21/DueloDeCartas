@@ -16,13 +16,6 @@ import modelo.*;
 public class Main {
     public static void main(String[] args) {
         
-        int i = new Random().nextInt(2);
-        for (int j = 0; j < 10; j++) {
-            i = new Random().nextInt(2)+1;
-            System.out.println(i);
-        }
-        
-        
     }
     
     public static void pruebaEstatica(){
@@ -53,7 +46,7 @@ public class Main {
         //JUGADOR OPONENTE SELECIONA SU CARTA Y LA CARTA DEL JUGADOR Y PRESIONA ATACAR
         i = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta con la que va atacar"));
         j = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta que va ser atacada"));
-        juego.atacarCarta(juego.oponente, i, juego.jugador, j);
+        juego.atacarCarta(juego.oponente, i, juego.jugador, j, false, 0, 0);
         juego.mostrarEstado();
         
         //JUGADOR UNO ROBA UNA CARTA Y COLOCA UNA CARTA DE DUELO Y UNA ESPECIAL
@@ -78,7 +71,7 @@ public class Main {
         i = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta con la que va atacar"));
         j = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta que va ser atacada"));
         
-        juego.atacarCarta(juego.oponente, i, juego.jugador, j);
+        juego.atacarCarta(juego.oponente, i, juego.jugador, j, false, 0, 0);
         
         juego.mostrarEstado();
     }

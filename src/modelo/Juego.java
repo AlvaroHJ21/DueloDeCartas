@@ -52,33 +52,34 @@ public class Juego {
 
     }
 
-    public void atacarCarta(Jugador atacante, int i, Jugador atacado, int j) {
+    //METODO ATACARCARTA:
+    //atacante -> Jugador que va atacar en su turno
+    //i -> carta con la que quiere atacar
+    //atacado -> Jugador que va ser atacado
+    //j -> carta a la que se quiere atacar
+    //responder -> true:si el atacado quiere contraatacar (validar antes de ejecutar esta funcion en la parte grafica)
+    //cartaActivada -> Carta Especial que se va activar
+    //cartaPotenciada -> Carta de Duelo que va ser potenciada con la carta espedial
+    public void atacarCarta(Jugador atacante, int i, Jugador atacado, int j, boolean responder, int cartaActivada, int cartaPotenciada) {
         //PARA PODER ATACER SE NECESITAN TENER CARTAS EN LA ZONA DE DUELO 1
         if (tablero.zonaDueloJugador.size() > 0 && tablero.zonaDueloOponente.size() > 0) {
-            //AVISAR AL JUGADOR QUE SERÁ ATACADO
-            if (atacado.zonaE.size() > 0) {
-                String opcion = JOptionPane.showInputDialog("El otro jugador quiere atacarte deseas activar una carta?");
-                if (opcion.equals("si")) {
-                    int v = Integer.parseInt(JOptionPane.showInputDialog("QUE CARTA QUIERES ACTIVAR"));
-                    int a = Integer.parseInt(JOptionPane.showInputDialog("A QUE CARTA QUIERES POTENCIAR"));
-                    activarCarta(atacado, v, a);
-                } else {
-                    System.out.println("Ok");
-                }
+
+            if (responder) {
+                activarCarta(atacado, cartaActivada, cartaPotenciada);
             }
 
-            //SELECCIONANDO CARTA DEL JUGADOR
+            //SELECCIONANDO CARTA DEL ATACANTE
             Carta cAtacante = atacante.zonaD.get(getIndexCartaPorValor(i, atacante.zonaD));
-            //SELECCIONANDO CARTA DEL OPONENTE
+            //SELECCIONANDO CARTA DEL ATACADO
             Carta cAtacado = atacado.zonaD.get(getIndexCartaPorValor(j, atacado.zonaD));
 
             if (cAtacante.getValorAbsoluto() > cAtacado.getValorAbsoluto()) { //LA CARTA DEL ATACANTE ES MAYOR
                 atacado.bajarVida(cAtacante.getValorAbsoluto() - cAtacado.getValorAbsoluto());
-                quitarCartaDeZona(cAtacado.valor, atacado.zonaD);// 
+                quitarCartaDeZona(cAtacado.valor, atacado.zonaD);
 
             } else if (cAtacado.getValorAbsoluto() > cAtacante.getValorAbsoluto()) { //LA CARTA DEL ATACANTE ES MENOR
                 atacante.bajarVida(cAtacado.getValorAbsoluto() - cAtacante.getValorAbsoluto());
-                quitarCartaDeZona(cAtacante.valor, atacante.zonaD); // 
+                quitarCartaDeZona(cAtacante.valor, atacante.zonaD);
 
             } else {
                 System.out.println("EMPATE"); //AMBAS CARTAS C DESTRUYEN
@@ -110,7 +111,12 @@ public class Juego {
     }
 
     public void quitarCartaDeZona(int valor, ArrayList<Carta> zona) {
-        zona.remove(getIndexCartaPorValor(valor, zona));
+        int index = getIndexCartaPorValor(valor, zona);
+        if (index != -1) {
+            zona.remove(index);
+        } else {
+            System.out.println("Error");
+        }
     }
 
     public void activarCarta(Jugador jugador, int vCartaActiva, int vCartaPotenciada) {
@@ -121,7 +127,9 @@ public class Juego {
             Carta c2 = jugador.zonaD.get(index2);
             c2.cartaPotenciadora = c1;
             c2.potenciar();
+
             quitarCartaDeZona(vCartaActiva, jugador.zonaE);
+            System.out.println("CARTA POTENCIADAAA!!");
         } else {
             System.out.println("Error no cuenta con cartas para realizar esa acción");
         }
@@ -150,6 +158,22 @@ public class Juego {
         jugador.mano.imprimirCartasE();
         System.out.println("***************************************************");
         System.out.println("Turno del jugador " + turno);
+    }
+
+    public boolean hayCartasEspecialesOcultas(ArrayList<Carta> zona) {
+        int i = 0;
+        for (Carta c : zona) {
+            if (c.estado.equals("oculto")) {
+                i++;
+            }
+        }
+        if (i > 0) {
+            System.out.println("CARTASSSSSSSSSSSSSSS -> " + i);
+            System.out.println(zona.size());
+            System.out.println(zona.get(0).valor);
+            return true;
+        }
+        return false;
     }
 
     public int getIndexCartaPorValor(int valor, ArrayList<Carta> zona) {

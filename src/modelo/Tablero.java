@@ -51,6 +51,8 @@ public class Tablero {
         }
         System.out.println("");
     }
+    
+    
 
     public void quitarCartaDeZona(int valor, ArrayList<Carta> zona) {
         zona.remove(getIndexCarta(valor, zona));

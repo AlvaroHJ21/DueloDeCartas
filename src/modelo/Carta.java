@@ -30,8 +30,10 @@ public class Carta {
             this.tipo = "trampa";
         }
         this.valorExtra = 0;
+        this.estado = "oculto";
     }
 
+    //solo funciona para las cartas especiales
     public void potenciar() {
         if (cartaPotenciadora != null) {
             switch (cartaPotenciadora.valor) {
@@ -54,6 +56,7 @@ public class Carta {
                     this.valorExtra += 6;
                     break;
             }
+            cartaPotenciadora.estado = "activado";
         }else{
             System.out.println("No hay carta potenciadora");
         }
@@ -72,6 +75,4 @@ public class Carta {
             return ""+this.valor+"("+this.valorExtra+")";
         }
     }
-    
-    
 }
