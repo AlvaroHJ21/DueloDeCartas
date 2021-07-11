@@ -24,6 +24,10 @@ public class Mano {
         this.cartasD = new ArrayList<Carta>();
         this.cartasE = new ArrayList<Carta>();
     }
+    
+    public int getNumeroCartas(){
+        return cartasD.size()+cartasE.size();
+    }
 
     public void addCarta(Carta c) {
         if (c.tipo.equals("duelo")) {
@@ -100,7 +104,7 @@ public class Mano {
         Random ran = new Random();
         int j;
         Carta c;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             j = ran.nextInt(valD.size());
             c = baraja.extraerCarta(valD.remove(j)); // obtiene el indice y luego lo desecha
             addCarta(c);
@@ -119,6 +123,7 @@ public class Mano {
         addCarta(c);
     }
 
+    
     public void imprimirCartasD() {
         System.out.print("CARTAS DUELO: ");
         for (Carta carta : this.cartasD) {
@@ -134,4 +139,5 @@ public class Mano {
         }
         System.out.println();
     }
+    
 }

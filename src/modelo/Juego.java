@@ -60,6 +60,7 @@ public class Juego {
     //responder -> true:si el atacado quiere contraatacar (validar antes de ejecutar esta funcion en la parte grafica)
     //cartaActivada -> Carta Especial que se va activar
     //cartaPotenciada -> Carta de Duelo que va ser potenciada con la carta espedial
+    /*
     public void atacarCarta(Jugador atacante, int i, Jugador atacado, int j, boolean responder, int cartaActivada, int cartaPotenciada) {
         //PARA PODER ATACER SE NECESITAN TENER CARTAS EN LA ZONA DE DUELO 1
         if (tablero.zonaDueloJugador.size() > 0 && tablero.zonaDueloOponente.size() > 0) {
@@ -89,15 +90,58 @@ public class Juego {
         } else {
             System.out.println("NO HAY CARTAS EN LAS ZONAS DE DUELO");
         }
+    }*/
+    
+    public int duelo(Jugador jugadorA, Carta cartaA, Jugador jugadorB, Carta cartaB){
+        if(cartaA.getValorAbsoluto()>cartaB.getValorAbsoluto()){
+            quitarCartaDeZona(cartaB.valor, jugadorB.zonaD);
+            jugadorB.bajarVida(cartaA.getValorAbsoluto()-cartaB.getValorAbsoluto());
+            return 1;
+        }else if(cartaA.getValorAbsoluto()<cartaB.getValorAbsoluto()){
+            quitarCartaDeZona(cartaA.valor, jugadorA.zonaD);
+            jugadorA.bajarVida(cartaB.getValorAbsoluto()-cartaA.getValorAbsoluto());
+            return 2;
+        }else{
+            quitarCartaDeZona(cartaB.valor, jugadorB.zonaD);
+            quitarCartaDeZona(cartaA.valor, jugadorA.zonaD);
+            System.out.println("EMPATE");
+            return 0;
+        }
     }
 
-    public void robarCarta(Jugador j) {
-        Carta c = j.baraja.extraerCartaArriba();
-        if (c != null) {
-            j.mano.addCarta(c);
-        } else {
-            System.out.println("NO HAY MAS CARTAS");
+    public boolean robarCarta() {
+        if (turno == 1) {
+            if (jugador.mano.getNumeroCartas() < 5) {
+                Carta c = jugador.baraja.extraerCartaArriba();
+                if (c != null) {
+                    jugador.mano.addCarta(c);
+                    jugador.maxCartasRobar--;
+                    return true;
+                } else {
+                    System.out.println("NO HAY MAS CARTAS");
+                    return false;
+                }
+            } else {
+                System.out.println("NO PUEDES TENER MÁS DE 5 CARTAS EN TU MANO, CRACK");
+                return false;
+            }
+        } else if (turno == 2) {
+            if (oponente.mano.getNumeroCartas() < 5) {
+                Carta c = oponente.baraja.extraerCartaArriba();
+                if (c != null) {
+                    oponente.mano.addCarta(c);
+                    oponente.maxCartasRobar--;
+                    return true;
+                } else {
+                    System.out.println("NO HAY MAS CARTAS");
+                    return false;
+                }
+            } else {
+                System.out.println("NO PUEDES TENER MÁS DE 5 CARTAS EN TU MANO, CRACK");
+                return false;
+            }
         }
+        return false;
     }
 
     public boolean colocarCartaEnZona(Jugador j, int seleccion, ArrayList<Carta> zona) {
@@ -110,6 +154,42 @@ public class Juego {
         return true;
     }
 
+    public boolean colocarCarta(int valor) {
+        if (turno == 1) {
+            if (valor >= 4 && valor <= 10) {
+                if (tablero.zonaDueloJugador.size() >= 3) {
+                    return false;
+                }
+                Carta c = jugador.mano.getCarta(valor);
+                tablero.zonaDueloJugador.add(c);
+                return true;
+            } else {
+                if (tablero.zonaEspecialJugador.size() >= 3) {
+                    return false;
+                }
+                Carta c = jugador.mano.getCarta(valor);
+                tablero.zonaEspecialJugador.add(c);
+                return true;
+            }
+        } else {
+            if (valor >= 4 && valor <= 10) {
+                if (tablero.zonaDueloOponente.size() >= 3) {
+                    return false;
+                }
+                Carta c = oponente.mano.getCarta(valor);
+                tablero.zonaDueloOponente.add(c);
+                return true;
+            } else {
+                if (tablero.zonaEspecialOponente.size() >= 3) {
+                    return false;
+                }
+                Carta c = oponente.mano.getCarta(valor);
+                tablero.zonaEspecialOponente.add(c);
+                return true;
+            }
+        }
+    }
+
     public void quitarCartaDeZona(int valor, ArrayList<Carta> zona) {
         int index = getIndexCartaPorValor(valor, zona);
         if (index != -1) {
@@ -118,6 +198,8 @@ public class Juego {
             System.out.println("Error");
         }
     }
+    
+    /*
 
     public void activarCarta(Jugador jugador, int vCartaActiva, int vCartaPotenciada) {
         int index1 = getIndexCartaPorValor(vCartaActiva, jugador.zonaE);
@@ -133,8 +215,76 @@ public class Juego {
         } else {
             System.out.println("Error no cuenta con cartas para realizar esa acción");
         }
+    }*/
+
+    /*--------------------------------------------------------------------------------*/
+    public void activarCartaTrampa(int cartaTrampa, int cartaAtacada, int cartaAtacante) {
+        switch (cartaTrampa) {
+            case 11: //DESTRUYE LA CARTA ATACANTE
+                destruirCartaDueloTablero(cartaAtacante);
+                quitarCartaEspecialUsada(11);
+                break;
+            case 12: //AÑADE +2
+                agregarValorExtra(cartaAtacada, 2);
+                quitarCartaEspecialUsada(12);
+                break;
+            case 13: //AÑADE +3
+                agregarValorExtra(cartaAtacada, 3);
+                quitarCartaEspecialUsada(13);
+                break;
+            default:
+                System.out.println("ERRORORORORORO");
+                break;
+        }
     }
 
+    public void quitarCartaEspecialUsada(int carta) {
+        if (turno == 1) {
+            quitarCartaDeZona(carta, tablero.zonaEspecialJugador);
+        } else {
+            quitarCartaDeZona(carta, tablero.zonaEspecialOponente);
+        }
+    }
+
+    public void destruirCartaDueloTablero(int carta) {
+        if (turno == 1) {
+            quitarCartaDeZona(carta, tablero.zonaDueloOponente);
+        } else {
+            quitarCartaDeZona(carta, tablero.zonaDueloJugador);
+        }
+    }
+
+    public void agregarValorExtra(int carta, int valorExtra) {
+        if (turno == 1) {
+            Carta c = getCartaPorValor(carta, this.tablero.zonaDueloJugador);
+            c.valorExtra = valorExtra;
+        } else {
+            Carta c = getCartaPorValor(carta, this.tablero.zonaDueloOponente);
+            c.valorExtra = valorExtra;
+        }
+    }
+
+    /*--------------------------------------------------------------------------------*/
+    /*--------------------------------------------------------------------------------*/
+    public void activarCartaMagica(int cartaMagica, int cartaDuelo){
+        switch (cartaMagica) {
+            case 1: //Añade +4 de ataque a una carta de duelo
+                agregarValorExtra(cartaDuelo, 4);
+                quitarCartaEspecialUsada(1);
+                break;
+            case 2: //Permite atacar 2 veces
+                break;
+            case 3: //El oponente no puede atacar en el siguiente turno
+                break;
+            default:
+                System.out.println("ERRORORORORORO");
+                break;
+        }
+    }
+    /*--------------------------------------------------------------------------------*/
+    
+    
+    
     public void pasarTurno() {
         if (turno == 1) {
             turno = 2;
@@ -160,10 +310,11 @@ public class Juego {
         System.out.println("Turno del jugador " + turno);
     }
 
-    public boolean hayCartasEspecialesOcultas(ArrayList<Carta> zona) {
+    public boolean hayCartasTrampaOcultas(ArrayList<Carta> zona) {
         int i = 0;
         for (Carta c : zona) {
-            if (c.estado.equals("oculto")) {
+//            if (c.estado.equals("oculto") && (c.valor >= 11 && c.valor <= 13)) { //SOLO CARTAS TRAMPA
+                if (c.estado.equals("oculto") && (c.tipo.equals("trampa"))) { //SOLO CARTAS TRAMPA
                 i++;
             }
         }
@@ -191,5 +342,14 @@ public class Juego {
             i = -1;
         }
         return i;
+    }
+
+    public Carta getCartaPorValor(int valor, ArrayList<Carta> cartas) {
+        for (Carta c : cartas) {
+            if (c.valor == valor) {
+                return c;
+            }
+        }
+        return null;
     }
 }

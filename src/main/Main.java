@@ -26,7 +26,7 @@ public class Main {
         juego.mostrarEstado();
         
         //JUGADOR UNO ROBA UNA CARTA
-        juego.robarCarta(juego.jugador);
+        juego.robarCarta();
         juego.mostrarEstado();
         
         //JUGADOR UNO COLOCA UNA CARTA DE DUELO
@@ -35,7 +35,7 @@ public class Main {
         juego.mostrarEstado();
         
         //JUGADOR OPONENTE ROBA UNA CARTA
-        juego.robarCarta(juego.oponente);
+        juego.robarCarta();
         juego.mostrarEstado();
         
         //JUGADOR OPONENTE COLOCA UNA CARTA DE DUELO
@@ -46,11 +46,11 @@ public class Main {
         //JUGADOR OPONENTE SELECIONA SU CARTA Y LA CARTA DEL JUGADOR Y PRESIONA ATACAR
         i = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta con la que va atacar"));
         j = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta que va ser atacada"));
-        juego.atacarCarta(juego.oponente, i, juego.jugador, j, false, 0, 0);
+        //juego.atacarCarta(juego.oponente, i, juego.jugador, j, false, 0, 0);
         juego.mostrarEstado();
         
         //JUGADOR UNO ROBA UNA CARTA Y COLOCA UNA CARTA DE DUELO Y UNA ESPECIAL
-        juego.robarCarta(juego.jugador);
+        juego.robarCarta();
         juego.mostrarEstado();
         i = Integer.parseInt(JOptionPane.showInputDialog("JUGADOR: valor de la carta de duelo que desea colocar"));
         juego.colocarCartaEnZona(juego.jugador, i, juego.tablero.zonaDueloJugador);
@@ -62,7 +62,7 @@ public class Main {
         //JUGADOR UNO PASA EL TURNO AL JUGADOR OPONENTE
         
         //JUGADOR OPONENTE ROBA UNA CARTA DE DUELO Y QUIERE ATACAR AL JUGADOR
-        juego.robarCarta(juego.oponente);
+        juego.robarCarta();
         juego.mostrarEstado();
         i = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta de duelo que desea colocar"));
         juego.colocarCartaEnZona(juego.oponente, i, juego.tablero.zonaDueloOponente);
@@ -71,7 +71,7 @@ public class Main {
         i = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta con la que va atacar"));
         j = Integer.parseInt(JOptionPane.showInputDialog("OPONENTE: valor de la carta que va ser atacada"));
         
-        juego.atacarCarta(juego.oponente, i, juego.jugador, j, false, 0, 0);
+        //juego.atacarCarta(juego.oponente, i, juego.jugador, j, false, 0, 0);
         
         juego.mostrarEstado();
     }

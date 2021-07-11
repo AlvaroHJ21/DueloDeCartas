@@ -37,22 +37,24 @@ public class Carta {
     public void potenciar() {
         if (cartaPotenciadora != null) {
             switch (cartaPotenciadora.valor) {
-                case 1:
+                //CARTAS MAGICAS
+                case 1: //Añade +4 de ataque a una carta de duelo -SIRVE PARA RESPONDER
                     this.valorExtra += 1;
                     break;
-                case 2:
+                case 2: //Permite atacar 2 veces (C DESTRUYE AL USARSE)
                     this.valorExtra += 2;
                     break;
-                case 3:
+                case 3: //El oponente no puede atacar en el siguiente turno (C DESTRUYE AL USARSE)
                     this.valorExtra += 3;
                     break;
-                case 11:
+                //CARTAS TRAMPA
+                case 11://Destruye una carta de duelo de tu oponente (C DESTRUYE AL USARSE)
                     this.valorExtra += 4;
                     break;
-                case 12:
+                case 12: //Añade +2 de ataque a una carta de duelo
                     this.valorExtra += 5;
                     break;
-                case 13:
+                case 13: //Añade +3 de ataque a una carta de duelo
                     this.valorExtra += 6;
                     break;
             }

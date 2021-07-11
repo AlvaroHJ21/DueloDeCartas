@@ -18,6 +18,11 @@ public class Jugador {
     public int vida;
     public boolean turno;
     
+    public int maxCartasColocar;
+    public int maxCartasRobar;
+    public int maxAtaques;
+    public boolean puedeAtacar;
+    
     public ArrayList<Carta> zonaD;
     public ArrayList<Carta> zonaE;
     
@@ -27,6 +32,17 @@ public class Jugador {
         this.mano = new Mano();
         this.vida = 10;
         this.turno = true;
+        
+        maxCartasColocar = 1;
+        maxCartasRobar = 1;
+        maxAtaques = 1;
+        puedeAtacar = true;
+    }
+    
+    public void setMax(int max1, int max2, int max3){
+        maxCartasColocar = max1;
+        maxCartasRobar = max2;
+        maxAtaques = max3;
     }
     
     public void bajarVida(int descuento){

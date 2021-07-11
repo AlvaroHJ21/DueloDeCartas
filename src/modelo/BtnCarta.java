@@ -5,7 +5,11 @@
  */
 package modelo;
 
+import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.Image;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JToggleButton;
 
 /**
@@ -14,6 +18,7 @@ import javax.swing.JToggleButton;
  */
 public class BtnCarta extends JToggleButton {
 
+    public ImageIcon icon;
     public Carta carta;
     //public boolean visible = true; // true: visible para el oponente
 
@@ -26,6 +31,8 @@ public class BtnCarta extends JToggleButton {
         } else {
             this.setText("");
         }
+        
+        setIconCarta();
     }
 
     public void actualizarTexto() {
@@ -33,6 +40,14 @@ public class BtnCarta extends JToggleButton {
             this.setText(String.valueOf(this.carta.valor) + "(+" + this.carta.valorExtra + ")");
         } else {
             this.setText(String.valueOf(this.carta.valor));
+        }
+    }
+    
+    public void setIconCarta(){
+        icon = new ImageIcon(getClass().getResource("/imagenes/espada.png"));
+        this.setIcon(icon);
+        switch(carta.valor){
+            
         }
     }
 

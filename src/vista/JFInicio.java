@@ -38,7 +38,12 @@ public class JFInicio extends javax.swing.JFrame {
     private int ANCHO_CARTA = 60;
     private int LARGO_CARTA = 80;
     private int x = 0, y = 0;
-    
+
+    private ArrayList<BtnCarta> btnCartasManoDuelo1;
+    private ArrayList<BtnCarta> btnCartasManoDuelo2;
+    private ArrayList<BtnCarta> btnCartasManoEspecial1;
+    private ArrayList<BtnCarta> btnCartasManoEspecial2;
+
     private ArrayList<BtnCarta> btnCartasTableroDuelo1;
     private ArrayList<BtnCarta> btnCartasTableroDuelo2;
     private ArrayList<BtnCarta> btnCartasTableroEspecial1;
@@ -52,16 +57,19 @@ public class JFInicio extends javax.swing.JFrame {
         //setMatrix();
         this.panelManoDuelo2.setPreferredSize(new Dimension(ANCHO_CARTA * 7, LARGO_CARTA));
         this.panelManoEspecial1.setPreferredSize(new Dimension(ANCHO_CARTA * 6, LARGO_CARTA));
-        
+
+        this.btnCartasManoDuelo1 = new ArrayList<BtnCarta>();
+        this.btnCartasManoDuelo2 = new ArrayList<BtnCarta>();
+        this.btnCartasManoEspecial1 = new ArrayList<BtnCarta>();
+        this.btnCartasManoEspecial2 = new ArrayList<BtnCarta>();
         this.btnCartasTableroDuelo1 = new ArrayList<BtnCarta>();
         this.btnCartasTableroDuelo2 = new ArrayList<BtnCarta>();
         this.btnCartasTableroEspecial1 = new ArrayList<BtnCarta>();
         this.btnCartasTableroEspecial2 = new ArrayList<BtnCarta>();
-        
-        
+
     }
 
-    private void actualizarJuego() {
+    public void actualizarJuego() {
         //actualizando labels
         this.txtVidaJugador1.setText(String.valueOf(juego.jugador.vida));
         this.txtVidaJugador2.setText(String.valueOf(juego.oponente.vida));
@@ -72,36 +80,60 @@ public class JFInicio extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "GANÓ EL JUGADOR 1");
             System.exit(0);
         }
-        
-        actualizarCartasGrupoPanel(juego.jugador.mano.cartasD, panelManoDuelo1, gBtnMano1);
-        actualizarCartasGrupoPanel(juego.jugador.mano.cartasE, panelManoEspecial1, gBtnMano1);
-        actualizarCartasGrupoPanel(juego.oponente.mano.cartasD, panelManoDuelo2, gBtnMano2);
-        actualizarCartasGrupoPanel(juego.oponente.mano.cartasE, panelManoEspecial2, gBtnMano2);
+
+        actualizarCartasMano(juego.jugador.mano.cartasD, panelManoDuelo1, gBtnMano1, btnCartasManoDuelo1);
+        actualizarCartasMano(juego.jugador.mano.cartasE, panelManoEspecial1, gBtnMano1, btnCartasManoEspecial1);
+        actualizarCartasMano(juego.oponente.mano.cartasD, panelManoDuelo2, gBtnMano2, btnCartasManoDuelo2);
+        actualizarCartasMano(juego.oponente.mano.cartasE, panelManoEspecial2, gBtnMano2, btnCartasManoEspecial2);
 
         this.actualizarVisibilidad();
-        this.actualizarCartasTablero();
-
+        this.actualizarCartasTablero(juego.tablero.zonaDueloJugador, panelTableroDuelo1, gBtnTableroDuelo1, btnCartasTableroDuelo1);
+        this.actualizarCartasTablero(juego.tablero.zonaEspecialJugador, panelTableroEspecial1, gBtnTableroEspecial1, btnCartasTableroEspecial1);
+        this.actualizarCartasTablero(juego.tablero.zonaDueloOponente, panelTableroDuelo2, gBtnTableroDuelo2, btnCartasTableroDuelo2);
+        this.actualizarCartasTablero(juego.tablero.zonaEspecialOponente, panelTableroEspecial2, gBtnTableroEspecial2, btnCartasTableroEspecial2);
         this.juego.mostrarEstado();
+
+        this.actualizarBotones();
     }
 
-    public void addCartaPanel(Carta c, JPanel panel, ButtonGroup grupo, int x, int y, boolean textVisible) {
-        BtnCarta btnCarta = new BtnCarta(c, x, y, ANCHO_CARTA, LARGO_CARTA, textVisible);
-        grupo.add(btnCarta);
-        panel.add(btnCarta);
-        btnCarta.updateUI();
-    }
-
-    private void actualizarCartasGrupoPanel(ArrayList<Carta> cartas, JPanel panel, ButtonGroup grupo) {
+    /*-------------------------------------------------------------------------------------------------------*/
+    private void actualizarCartasMano(ArrayList<Carta> cartas, JPanel panel, ButtonGroup grupo, ArrayList<BtnCarta> btnCartas) {
+        panel.removeAll();
+        btnCartas.clear();
         x = 0;
         y = 0;
-        panel.removeAll();
         for (Carta c : cartas) {
-            addCartaPanel(c, panel, grupo, x, y, true);
+            BtnCarta btnCarta = new BtnCarta(c, x, y, ANCHO_CARTA, LARGO_CARTA, true);
+            panel.add(btnCarta);
+            grupo.add(btnCarta);
+            btnCarta.updateUI();
+            btnCartas.add(btnCarta);
             x += ANCHO_CARTA;
         }
         panel.updateUI();
     }
 
+    private void actualizarCartasTablero(ArrayList<Carta> cartas, JPanel panel, ButtonGroup grupo, ArrayList<BtnCarta> btnCartas) {
+        panel.removeAll();
+        btnCartas.clear();
+        x = 0;
+        y = 0;
+        for (Carta c : cartas) {
+            boolean flag = true;
+            if ((juego.turno == 1 && panel.equals(panelTableroEspecial2)) || (juego.turno == 2 && panel.equals(panelTableroEspecial1))) {
+                flag = false;
+            }
+            BtnCarta btnCarta = new BtnCarta(c, x, y, LARGO_CARTA, ANCHO_CARTA, flag);
+            panel.add(btnCarta);
+            grupo.add(btnCarta);
+            btnCarta.updateUI();
+            btnCartas.add(btnCarta);
+            x += LARGO_CARTA;
+        }
+        panel.updateUI();
+    }
+
+    /*-------------------------------------------------------------------------------------------------------*/
     public void addCartaTablero(Carta c, JPanel panel, ButtonGroup grupo, ArrayList<BtnCarta> btnCartas, int x, int y, boolean textVisible) {
         BtnCarta btnCarta = new BtnCarta(c, x, y, LARGO_CARTA, ANCHO_CARTA, textVisible);
         btnCartas.add(btnCarta);
@@ -110,10 +142,27 @@ public class JFInicio extends javax.swing.JFrame {
         btnCarta.updateUI();
     }
 
+    public void actualizarBotones() {
+        if (juego.turno == 1) {
+            if (juego.jugador.maxCartasRobar <= 0) {
+                this.btnRobarCarta.setEnabled(false);
+            } else {
+                this.btnRobarCarta.setEnabled(true);
+            }
+        } else {
+            if (juego.oponente.maxCartasRobar <= 0) {
+                this.btnRobarCarta.setEnabled(false);
+            } else {
+                this.btnRobarCarta.setEnabled(true);
+            }
+        }
+    }
+
+    /*
     private void actualizarCartasTablero() {
         x = 0;
         y = 0;
-        panelTablero2.removeAll();
+        panelTableroEspecial2.removeAll();
         btnCartasTableroEspecial2.clear();
         btnCartasTableroDuelo2.clear();
         for (Carta c : juego.tablero.zonaEspecialOponente) {
@@ -121,24 +170,24 @@ public class JFInicio extends javax.swing.JFrame {
             if(juego.turno == 1){
                 flag = false;
             }
-            addCartaTablero(c, panelTablero2, gBtnTableroEspecial2, btnCartasTableroEspecial2, x, y, flag);
+            addCartaTablero(c, panelTableroEspecial2, gBtnTableroEspecial2, btnCartasTableroEspecial2, x, y, flag);
             x += LARGO_CARTA;
         }
         x = 0;
         y = ANCHO_CARTA;
         for (Carta c : juego.tablero.zonaDueloOponente) {
-            addCartaTablero(c, panelTablero2, gBtnTableroDuelo2, btnCartasTableroDuelo2, x, y, true);
+            addCartaTablero(c, panelTableroEspecial2, gBtnTableroDuelo2, btnCartasTableroDuelo2, x, y, true);
             x += LARGO_CARTA;
         }
-        panelTablero2.updateUI();
+        panelTableroEspecial2.updateUI();
 
         x = 0;
         y = 0;
-        panelTablero1.removeAll();
+        panelTableroDuelo1.removeAll();
         btnCartasTableroDuelo1.clear();
         btnCartasTableroEspecial1.clear();
         for (Carta c : juego.tablero.zonaDueloJugador) {
-            addCartaTablero(c, panelTablero1, gBtnTableroDuelo1, btnCartasTableroDuelo1, x, y, true);
+            addCartaTablero(c, panelTableroDuelo1, gBtnTableroDuelo1, btnCartasTableroDuelo1, x, y, true);
             x += LARGO_CARTA;
         }
         x = 0;
@@ -148,30 +197,47 @@ public class JFInicio extends javax.swing.JFrame {
             if(juego.turno == 2){
                 flag = false;
             }
-            addCartaTablero(c, panelTablero1, gBtnTableroEspecial1, btnCartasTableroEspecial1, x, y, flag);
+            addCartaTablero(c, panelTableroDuelo1, gBtnTableroEspecial1, btnCartasTableroEspecial1, x, y, flag);
             x += LARGO_CARTA;
         }
-        panelTablero1.updateUI();
-    }
-    
-    private BtnCarta getBtnCartaSeleccionada(ArrayList<BtnCarta> btnCartas){
+        panelTableroDuelo1.updateUI();
+    }*/
+
+ /*------------------------------------------------------------------------------*/
+    private BtnCarta getBtnCartaSeleccionada(ArrayList<BtnCarta> btnCartasTableroDuelo) {
         BtnCarta btnCarta = null;
-        for(BtnCarta b: btnCartas){
-            if(b.isSelected()){
+        for (BtnCarta b : btnCartasTableroDuelo) {
+            if (b.isSelected()) {
                 btnCarta = b;
                 break;
             }
         }
         return btnCarta;
     }
-    
-    void mostrarBtnCartas(ArrayList<BtnCarta> btnCartas){
-        for(BtnCarta btn: btnCartas){
-            System.out.print(btn.carta.valor+" ");
+
+    private BtnCarta getBtnCartaSeleccionada(ArrayList<BtnCarta> btnCartasManoDuelo, ArrayList<BtnCarta> btnCartasManoEspeciales) {
+        BtnCarta btn = null;
+        for (BtnCarta b : btnCartasManoDuelo) {
+            if (b.isSelected()) {
+                btn = b;
+            }
+        }
+        for (BtnCarta b : btnCartasManoEspeciales) {
+            if (b.isSelected()) {
+                btn = b;
+            }
+        }
+        return btn;
+    }
+
+    /*------------------------------------------------------------------------------*/
+    void mostrarBtnCartas(ArrayList<BtnCarta> btnCartas) {
+        for (BtnCarta btn : btnCartas) {
+            System.out.print(btn.carta.valor + " ");
         }
         System.out.println("");
     }
-    
+
     private void actualizarVisibilidad() {
         if (juego.turno == 1) {
             setVisibleBotones(gBtnMano1, true);
@@ -181,7 +247,7 @@ public class JFInicio extends javax.swing.JFrame {
             //ocultar cartas especiales del jugador 2
             setVisibilidadBtnCartas(this.btnCartasTableroEspecial2, false);
             setVisibilidadBtnCartas(this.btnCartasTableroEspecial1, true);
-            
+
         } else if (juego.turno == 2) {
             setVisibleBotones(gBtnMano2, true);
             setVisibleBotones(gBtnMano1, false);
@@ -192,9 +258,9 @@ public class JFInicio extends javax.swing.JFrame {
             setVisibilidadBtnCartas(this.btnCartasTableroEspecial1, false);
         }
     }
-    
-    private void setVisibilidadBtnCartas(ArrayList<BtnCarta> btnCartas, boolean visible){
-        for(BtnCarta b: btnCartas){
+
+    private void setVisibilidadBtnCartas(ArrayList<BtnCarta> btnCartas, boolean visible) {
+        for (BtnCarta b : btnCartas) {
             b.setVisibilidadValor(visible);
         }
     }
@@ -207,14 +273,41 @@ public class JFInicio extends javax.swing.JFrame {
     }
 
     private void robarCarta() {
-        if (juego.turno == 1) {
-            this.juego.robarCarta(this.juego.jugador);
-        } else if (juego.turno == 2) {
-            this.juego.robarCarta(this.juego.oponente);
+        if (!this.juego.robarCarta()) {
+            JOptionPane.showMessageDialog(null, "Error: Ya no hay cartas o tienes >=5 cartas en tu mano");
+            this.btnRobarCarta.setEnabled(false);
+        } else {
+            this.btnRobarCarta.setEnabled(true);
         }
         actualizarJuego();
     }
 
+    private void colocarCarta() {
+        BtnCarta btnSelect;
+        if (juego.turno == 1) {
+            btnSelect = getBtnCartaSeleccionada(btnCartasManoDuelo1, btnCartasManoEspecial1);
+        } else {
+            btnSelect = getBtnCartaSeleccionada(btnCartasManoDuelo2, btnCartasManoEspecial2);
+        }
+        if (btnSelect != null) {
+            int valor = btnSelect.carta.valor;
+            if (!juego.colocarCarta(valor)) {
+                JOptionPane.showMessageDialog(null, "No hay espacio, broo...");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecciona una carta capo");
+        }
+        gBtnTableroDuelo1.clearSelection();
+        gBtnMano1.clearSelection();
+        gBtnTableroDuelo2.clearSelection();
+        gBtnMano2.clearSelection();
+        gBtnTableroEspecial1.clearSelection();
+        gBtnTableroEspecial2.clearSelection();
+
+        actualizarJuego();
+    }
+
+    /*
     private void colocarCarta() {
         if (juego.turno == 1) {
             int valor = getValorJToggleButton(gBtnMano1);
@@ -257,7 +350,7 @@ public class JFInicio extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Selecciona una carta, CAPO");
             }
-        } else{
+        } else {
             JOptionPane.showMessageDialog(this, "Error");
         }
         gBtnTableroDuelo1.clearSelection();
@@ -268,7 +361,60 @@ public class JFInicio extends javax.swing.JFrame {
         gBtnTableroEspecial2.clearSelection();
 
         actualizarJuego();
+    }*/
+    private void abrirDialogo(BtnCarta btnAtacante, BtnCarta btnAtacada) {
+        DialogoRespuesta dialogo = new DialogoRespuesta(this, this.juego, btnAtacante, btnAtacada);
+        dialogo.setLocationRelativeTo(null);
+        dialogo.setVisible(true);
     }
+
+    private void atacar() {
+        BtnCarta btnCarta1 = this.getBtnCartaSeleccionada(btnCartasTableroDuelo1);
+        BtnCarta btnCarta2 = this.getBtnCartaSeleccionada(btnCartasTableroDuelo2);
+        int resultado = -1;
+        if (btnCarta1 != null && btnCarta2 != null) {
+            if (juego.turno == 1) {
+                if (juego.hayCartasTrampaOcultas(juego.tablero.zonaEspecialOponente)) {
+                    this.pasarTurno();
+                    abrirDialogo(btnCarta1, btnCarta2);
+                } else {
+                    resultado = juego.duelo(juego.jugador, btnCarta1.carta, juego.oponente, btnCarta2.carta);
+                    mostrarResultado(resultado);
+                }
+            } else {
+                if (juego.hayCartasTrampaOcultas(juego.tablero.zonaEspecialJugador)) {
+                    this.pasarTurno();
+                    abrirDialogo(btnCarta2, btnCarta1);
+                } else {
+                    resultado = juego.duelo(juego.jugador, btnCarta1.carta, juego.oponente, btnCarta2.carta);
+                    mostrarResultado(resultado);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Se requiere seleccionar dos cartas");
+        }
+    }
+
+    public void mostrarResultado(int resultado) {
+        actualizarJuego();
+        switch (resultado) {
+            case 1:
+                JOptionPane.showMessageDialog(this, "El duelo lo ganó el jugador 1");
+                break;
+            case 2:
+                JOptionPane.showMessageDialog(this, "El duelo lo ganó el jugador 2");
+                break;
+            case 0:
+                JOptionPane.showMessageDialog(this, "Ambos empataron");
+                break;
+            default:
+                System.out.println("ERROROROROROROR");
+                break;
+        }
+        pasarTurno();
+    }
+
+    /*
 
     private void atacar() {
         BtnCarta btnCarta1 = this.getBtnCartaSeleccionada(btnCartasTableroDuelo1);
@@ -282,7 +428,9 @@ public class JFInicio extends javax.swing.JFrame {
                 if (juego.hayCartasEspecialesOcultas(juego.tablero.zonaEspecialOponente)) {
                     juego.pasarTurno();//1->2
                     this.actualizarJuego();
-                    int opcion = JOptionPane.showConfirmDialog(this, "Te quieren atacar loko, y tienes cartas que puedes activar, deseas hacerlo?:");
+                    
+                    int opcion = JOptionPane.showConfirmDialog(this, "Te quieren atacar, y tienes cartas que puedes activar, deseas hacerlo?:");
+
                     if (opcion == JOptionPane.OK_OPTION) {
                         int cartaActivada = Integer.parseInt(JOptionPane.showInputDialog("Carta (especial) que desea activar"));
                         int cartaPotenciada = Integer.parseInt(JOptionPane.showInputDialog("Carta (duelo) que desea potenciar"));
@@ -291,7 +439,7 @@ public class JFInicio extends javax.swing.JFrame {
                         juego.atacarCarta(juego.jugador, valor1, juego.oponente, valor2, true, cartaActivada, cartaPotenciada);
                         juego.pasarTurno();//1->2
                     } else {
-                        JOptionPane.showMessageDialog(this, "aea jodete");
+                        JOptionPane.showMessageDialog(this, "ok");
                         juego.pasarTurno();//2->1
                         juego.atacarCarta(juego.jugador, valor1, juego.oponente, valor2, false, 0, 0);
                         juego.pasarTurno();//1->2
@@ -306,7 +454,7 @@ public class JFInicio extends javax.swing.JFrame {
                 if (juego.hayCartasEspecialesOcultas(juego.tablero.zonaEspecialJugador)) {
                     juego.pasarTurno();//2->1
                     this.actualizarJuego();
-                    int opcion = JOptionPane.showConfirmDialog(this, "Te quieren atacar loko, y tienes cartas que puedes activar, deseas hacerlo?:");
+                    int opcion = JOptionPane.showConfirmDialog(this, "Te quieren atacar, y tienes cartas que puedes activar, deseas hacerlo?:");
                     if (opcion == JOptionPane.OK_OPTION) {
                         int cartaActivada = Integer.parseInt(JOptionPane.showInputDialog("Carta (especial) que desea activar"));
                         int cartaPotenciada = Integer.parseInt(JOptionPane.showInputDialog("Carta (duelo) que desea potenciar"));
@@ -315,7 +463,7 @@ public class JFInicio extends javax.swing.JFrame {
                         juego.atacarCarta(juego.oponente, valor2, juego.jugador, valor1, true, cartaActivada, cartaPotenciada);
                         juego.pasarTurno();//2->1
                     } else {
-                        JOptionPane.showMessageDialog(this, "aea jodete");
+                        JOptionPane.showMessageDialog(this, "ok");
                         juego.pasarTurno();//1->2
                         juego.atacarCarta(juego.oponente, valor2, juego.jugador, valor1, false, 0, 0);
                         juego.pasarTurno();//2->1
@@ -331,19 +479,26 @@ public class JFInicio extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Se requiere seleccionar dos cartas");
         }
-    }
-
-    private void activarCartaEspecial() {
-        int cartaActiva = 0;
-        int cartaPotenciada = 0;
+    }*/
+    private void activarCartaMagica() {
         if (juego.turno == 1) {
-            cartaActiva = getValorJToggleButton(gBtnTableroEspecial1);
-            cartaPotenciada = getValorJToggleButton(gBtnTableroDuelo1);
-            juego.activarCarta(juego.jugador, cartaActiva, cartaPotenciada);
-        } else if (juego.turno == 2) {
-            cartaActiva = getValorJToggleButton(gBtnTableroEspecial2);
-            cartaPotenciada = getValorJToggleButton(gBtnTableroDuelo2);
-            juego.activarCarta(juego.oponente, cartaActiva, cartaPotenciada);
+            BtnCarta cartaMagica = getBtnCartaSeleccionada(btnCartasTableroEspecial1);
+            BtnCarta cartaDuelo = getBtnCartaSeleccionada(btnCartasTableroDuelo1);
+            if (cartaMagica != null && cartaMagica.carta.valor == 1 && cartaDuelo != null) {
+                juego.activarCartaMagica(cartaMagica.carta.valor, cartaDuelo.carta.valor);
+                JOptionPane.showMessageDialog(null, "Carta Magica Activada!!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione una carta magica");
+            }
+        } else {
+            BtnCarta cartaMagica = getBtnCartaSeleccionada(btnCartasTableroEspecial2);
+            BtnCarta cartaDuelo = getBtnCartaSeleccionada(btnCartasTableroDuelo2);
+            if (cartaMagica != null && cartaMagica.carta.valor == 1 && cartaDuelo != null) {
+                juego.activarCartaMagica(cartaMagica.carta.valor, cartaDuelo.carta.valor);
+                JOptionPane.showMessageDialog(null, "Carta Magica Activada!!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione una carta magica");
+            }
         }
 
     }
@@ -359,7 +514,15 @@ public class JFInicio extends javax.swing.JFrame {
         }
         return 0;
     }
-    
+
+    private void pasarTurno() {
+        juego.pasarTurno();
+        juego.jugador.setMax(1, 1, 1);
+        juego.oponente.setMax(1, 1, 1);
+        this.btnRobarCarta.setEnabled(true);
+        this.actualizarJuego();
+    }
+
     private void setJToggleButton(ButtonGroup buttonGroup, int valor) {
         for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
             AbstractButton button = buttons.nextElement();
@@ -405,8 +568,10 @@ public class JFInicio extends javax.swing.JFrame {
         txtVidaJugador2 = new javax.swing.JLabel();
         txtVidaJugador1 = new javax.swing.JLabel();
         btnActivar = new javax.swing.JButton();
-        panelTablero2 = new javax.swing.JPanel();
-        panelTablero1 = new javax.swing.JPanel();
+        panelTableroEspecial2 = new javax.swing.JPanel();
+        panelTableroDuelo2 = new javax.swing.JPanel();
+        panelTableroDuelo1 = new javax.swing.JPanel();
+        panelTableroEspecial1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(500, 600));
@@ -425,9 +590,9 @@ public class JFInicio extends javax.swing.JFrame {
 
         panelTablero.setLayout(null);
         panelTablero.add(jSeparator1);
-        jSeparator1.setBounds(10, 210, 320, 10);
+        jSeparator1.setBounds(0, 190, 320, 10);
         panelTablero.add(jSeparator2);
-        jSeparator2.setBounds(10, 150, 320, 10);
+        jSeparator2.setBounds(0, 130, 320, 10);
 
         btnColocar.setText("Colocar");
         btnColocar.addActionListener(new java.awt.event.ActionListener() {
@@ -436,7 +601,7 @@ public class JFInicio extends javax.swing.JFrame {
             }
         });
         panelTablero.add(btnColocar);
-        btnColocar.setBounds(230, 160, 100, 24);
+        btnColocar.setBounds(220, 140, 100, 24);
 
         btnRobarCarta.setText("RobarCarta");
         btnRobarCarta.addActionListener(new java.awt.event.ActionListener() {
@@ -445,7 +610,7 @@ public class JFInicio extends javax.swing.JFrame {
             }
         });
         panelTablero.add(btnRobarCarta);
-        btnRobarCarta.setBounds(10, 180, 100, 24);
+        btnRobarCarta.setBounds(0, 160, 100, 24);
 
         btnRepartir.setText("Actualizar");
         btnRepartir.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -459,7 +624,7 @@ public class JFInicio extends javax.swing.JFrame {
             }
         });
         panelTablero.add(btnRepartir);
-        btnRepartir.setBounds(10, 160, 99, 24);
+        btnRepartir.setBounds(0, 140, 99, 24);
 
         btnPasarTurno.setText("Pasar turno");
         btnPasarTurno.addActionListener(new java.awt.event.ActionListener() {
@@ -468,7 +633,7 @@ public class JFInicio extends javax.swing.JFrame {
             }
         });
         panelTablero.add(btnPasarTurno);
-        btnPasarTurno.setBounds(120, 180, 100, 24);
+        btnPasarTurno.setBounds(110, 160, 100, 24);
 
         btnAtacar.setText("¡Atacar!");
         btnAtacar.addActionListener(new java.awt.event.ActionListener() {
@@ -477,7 +642,7 @@ public class JFInicio extends javax.swing.JFrame {
             }
         });
         panelTablero.add(btnAtacar);
-        btnAtacar.setBounds(120, 160, 100, 24);
+        btnAtacar.setBounds(110, 140, 100, 24);
         panelTablero.add(txtVidaJugador2);
         txtVidaJugador2.setBounds(340, 70, 40, 20);
         panelTablero.add(txtVidaJugador1);
@@ -490,68 +655,92 @@ public class JFInicio extends javax.swing.JFrame {
             }
         });
         panelTablero.add(btnActivar);
-        btnActivar.setBounds(230, 180, 100, 24);
+        btnActivar.setBounds(220, 160, 100, 24);
 
-        javax.swing.GroupLayout panelTablero2Layout = new javax.swing.GroupLayout(panelTablero2);
-        panelTablero2.setLayout(panelTablero2Layout);
-        panelTablero2Layout.setHorizontalGroup(
-            panelTablero2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panelTableroEspecial2Layout = new javax.swing.GroupLayout(panelTableroEspecial2);
+        panelTableroEspecial2.setLayout(panelTableroEspecial2Layout);
+        panelTableroEspecial2Layout.setHorizontalGroup(
+            panelTableroEspecial2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 330, Short.MAX_VALUE)
         );
-        panelTablero2Layout.setVerticalGroup(
-            panelTablero2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 140, Short.MAX_VALUE)
+        panelTableroEspecial2Layout.setVerticalGroup(
+            panelTableroEspecial2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
         );
 
-        panelTablero.add(panelTablero2);
-        panelTablero2.setBounds(0, 0, 330, 140);
+        panelTablero.add(panelTableroEspecial2);
+        panelTableroEspecial2.setBounds(0, 0, 330, 60);
 
-        javax.swing.GroupLayout panelTablero1Layout = new javax.swing.GroupLayout(panelTablero1);
-        panelTablero1.setLayout(panelTablero1Layout);
-        panelTablero1Layout.setHorizontalGroup(
-            panelTablero1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panelTableroDuelo2Layout = new javax.swing.GroupLayout(panelTableroDuelo2);
+        panelTableroDuelo2.setLayout(panelTableroDuelo2Layout);
+        panelTableroDuelo2Layout.setHorizontalGroup(
+            panelTableroDuelo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 330, Short.MAX_VALUE)
         );
-        panelTablero1Layout.setVerticalGroup(
-            panelTablero1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 140, Short.MAX_VALUE)
+        panelTableroDuelo2Layout.setVerticalGroup(
+            panelTableroDuelo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
         );
 
-        panelTablero.add(panelTablero1);
-        panelTablero1.setBounds(0, 220, 330, 140);
+        panelTablero.add(panelTableroDuelo2);
+        panelTableroDuelo2.setBounds(0, 70, 330, 60);
+
+        javax.swing.GroupLayout panelTableroDuelo1Layout = new javax.swing.GroupLayout(panelTableroDuelo1);
+        panelTableroDuelo1.setLayout(panelTableroDuelo1Layout);
+        panelTableroDuelo1Layout.setHorizontalGroup(
+            panelTableroDuelo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 330, Short.MAX_VALUE)
+        );
+        panelTableroDuelo1Layout.setVerticalGroup(
+            panelTableroDuelo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
+        );
+
+        panelTablero.add(panelTableroDuelo1);
+        panelTableroDuelo1.setBounds(0, 200, 330, 60);
+
+        javax.swing.GroupLayout panelTableroEspecial1Layout = new javax.swing.GroupLayout(panelTableroEspecial1);
+        panelTableroEspecial1.setLayout(panelTableroEspecial1Layout);
+        panelTableroEspecial1Layout.setHorizontalGroup(
+            panelTableroEspecial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 330, Short.MAX_VALUE)
+        );
+        panelTableroEspecial1Layout.setVerticalGroup(
+            panelTableroEspecial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
+        );
+
+        panelTablero.add(panelTableroEspecial1);
+        panelTableroEspecial1.setBounds(0, 270, 330, 60);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(panelTablero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1)
-                        .addComponent(jScrollPane3)
-                        .addComponent(jScrollPane4))
-                    .addContainerGap()))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+                    .addComponent(panelTablero, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 830, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(panelTablero, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap()))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelTablero, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         scroll.setViewportView(jPanel1);
@@ -560,11 +749,13 @@ public class JFInicio extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scroll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(scroll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scroll, javax.swing.GroupLayout.DEFAULT_SIZE, 830, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(scroll, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -576,7 +767,7 @@ public class JFInicio extends javax.swing.JFrame {
 
     private void btnRobarCartaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRobarCartaActionPerformed
         this.robarCarta();
-        this.btnRobarCarta.setEnabled(false);
+        //this.btnRobarCarta.setEnabled(false);
     }//GEN-LAST:event_btnRobarCartaActionPerformed
 
     private void btnRepartirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRepartirActionPerformed
@@ -589,18 +780,15 @@ public class JFInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnColocarActionPerformed
 
     private void btnPasarTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasarTurnoActionPerformed
-        juego.pasarTurno();
-        this.btnRobarCarta.setEnabled(true);
-        this.actualizarJuego();
+        this.pasarTurno();
     }//GEN-LAST:event_btnPasarTurnoActionPerformed
 
     private void btnAtacarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtacarActionPerformed
         this.atacar();
-
     }//GEN-LAST:event_btnAtacarActionPerformed
 
     private void btnActivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivarActionPerformed
-        this.activarCartaEspecial();
+        this.activarCartaMagica();
         this.actualizarJuego();
     }//GEN-LAST:event_btnActivarActionPerformed
 
@@ -664,8 +852,10 @@ public class JFInicio extends javax.swing.JFrame {
     private javax.swing.JPanel panelManoEspecial1;
     private javax.swing.JPanel panelManoEspecial2;
     private javax.swing.JPanel panelTablero;
-    private javax.swing.JPanel panelTablero1;
-    private javax.swing.JPanel panelTablero2;
+    private javax.swing.JPanel panelTableroDuelo1;
+    private javax.swing.JPanel panelTableroDuelo2;
+    private javax.swing.JPanel panelTableroEspecial1;
+    private javax.swing.JPanel panelTableroEspecial2;
     private javax.swing.JScrollPane scroll;
     private javax.swing.JLabel txtVidaJugador1;
     private javax.swing.JLabel txtVidaJugador2;
